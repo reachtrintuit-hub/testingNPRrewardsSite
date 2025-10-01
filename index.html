@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NPR Reward Points Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <!-- Header -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto flex items-center justify-between px-6 py-4">
+      <div class="flex items-center space-x-3">
+        <img src="nprlogo.webp" alt="NPR Logo" class="h-12 w-12">
+        <h1 class="text-2xl font-bold text-indigo-700">Reward Points Portal</h1>
+      </div>
+    </div>
+  </header>
+
+  <!-- Search Section -->
+  <section class="container mx-auto mt-8 px-6">
+    <div class="bg-white shadow-lg rounded-xl p-6">
+      <h2 class="text-lg font-semibold flex items-center space-x-2 text-indigo-700 mb-6">
+        <i data-lucide="search" class="w-5 h-5"></i>
+        <span>Search Student</span>
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+        <!-- Register No -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Register No</label>
+          <input id="regno" type="text" placeholder="Ex: 583224103001"
+            class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none" />
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Email</label>
+          <input id="email" type="text" placeholder="Ex: name@email.com"
+            class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none" />
+        </div>
+
+        <!-- Name -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Name</label>
+          <input id="name" type="text" placeholder="Ex: Amirthaa"
+            class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none" />
+        </div>
+
+        <!-- Department (Reduced width) -->
+        <div >
+          <label class="block text-sm font-medium mb-1">Department</label>
+          <select id="department"
+            class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+            <option value="">Select Department</option>
+          </select>
+        </div>
+
+        <!-- Activity -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Activity</label>
+          <select id="activity"
+            class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+            <option value="">Select Activity</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Reward Points Box -->
+      <div class="mt-6">
+        <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 grid grid-cols-1 sm:grid-cols-3 gap-4 h-28">
+          <div class="flex flex-col justify-center items-center">
+            <span class="text-gray-500 text-sm font-medium">Average Reward Points</span>
+            <span id="avgPoints" class="text-indigo-700 font-bold text-lg">0</span>
+          </div>
+          <div class="flex flex-col justify-center items-center">
+            <span class="text-gray-500 text-sm font-medium">Your Points</span>
+            <span id="studentPoints" class="text-green-600 font-bold text-lg">0</span>
+          </div>
+          <div class="flex flex-col justify-center items-center">
+            <span class="text-gray-500 text-sm font-medium">Required Points for Average</span>
+            <span id="remainingPoints" class="text-red-600 font-bold text-lg">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end mt-4">
+        <button onclick="searchStudent()"
+          class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 flex items-center space-x-2 shadow">
+          <i data-lucide="search"></i>
+          <span>Search</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Result Section -->
+  <section class="container mx-auto mt-8 px-6 mb-12 hidden" id="resultSection">
+    <div class="bg-white shadow-lg rounded-xl overflow-hidden">
+
+      <!-- Student Details -->
+      <div class="px-6 py-4 border-b bg-indigo-50">
+        <h3 class="text-lg font-bold text-indigo-700 mb-4">Student Details</h3>
+        <div id="studentInfo" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-800 text-sm"></div>
+      </div>
+
+      <!-- Activity Table -->
+      <div class="overflow-x-auto p-6">
+        <table class="min-w-full table-auto border border-gray-200 divide-y divide-gray-200 rounded-xl shadow-sm">
+          <thead class="bg-indigo-600 text-white">
+            <tr>
+              <th class="px-6 py-4 text-left font-semibold tracking-wide">S.No</th>
+              <th class="px-6 py-4 text-left font-semibold tracking-wide">Activity</th>
+              <th class="px-6 py-4 text-left font-semibold tracking-wide">Date</th>
+              <th class="px-6 py-4 text-left font-semibold tracking-wide">Points</th>
+            </tr>
+          </thead>
+          <tbody id="resultTable" class="bg-white divide-y divide-gray-200"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+<script>
+const sheetId = "1jC8WoY9hz5_4wJ2f2BDD57NxZRHTbqNJcV12yBhYAHo";
+const sheetName = "RewardPoints_All_2ndYears_NPR";
+const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${sheetName}`;
+let students = [], headers = [];
+
+// Load Google Sheet Data
+async function loadData() {
+  try {
+    const res = await fetch(sheetUrl);
+    const text = await res.text();
+    const json = JSON.parse(text.substr(47).slice(0, -2));
+
+    headers = json.table.cols.map(c => c.label?.trim()).filter(Boolean);
+    const rows = json.table.rows;
+    students = rows.map(r => {
+      const obj = {};
+      headers.forEach((h,i) => obj[h]= r.c[i]?.v || "");
+      return obj;
+    });
+
+    // Populate Department Dropdown
+    const deptInput = document.getElementById("department");
+    const depts = [...new Set(students.map(s=>s["Department"]?.trim()))].filter(Boolean).sort();
+    depts.forEach(d => deptInput.innerHTML += `<option value="${d}">${d}</option>`);
+
+    // Populate Activity Dropdown
+    const activityInput = document.getElementById("activity");
+    headers.forEach(h => {
+      if (h.startsWith("RP_")) {
+        const label = h.replace("RP_", "").replace(/_/g, " ");
+        activityInput.innerHTML += `<option value="${h}">${label}</option>`;
+      }
+    });
+
+    lucide.createIcons();
+  } catch(e) {
+    console.error(e);
+    alert("❌ Failed to load data.");
+  }
+}
+
+// Parse activity column
+function parseActivityDetails(columnName) {
+  const parts = columnName.split("_");
+  let date="", activity="";
+  parts.forEach(p => {
+    if(/^\d{2}\.\d{2}\.\d{4}$/.test(p)) date=p;
+  });
+  activity = parts.filter(p => p!=="RP" && !/^\d{1,2}yr$/.test(p) && !/^\d{2}\.\d{2}\.\d{4}$/.test(p)).join(" ");
+  return {date, activity};
+}
+
+// Search + Display
+function searchStudent() {
+  const roll = document.getElementById("regno").value.trim().toLowerCase();
+  const email = document.getElementById("email").value.trim().toLowerCase();
+  const name = document.getElementById("name").value.trim().toLowerCase();
+  const dept = document.getElementById("department").value;
+  const activity = document.getElementById("activity").value;
+
+  let filtered = students;
+  if(roll) filtered = filtered.filter(s=>String(s["Register No"]).toLowerCase()===roll);
+  if(email) filtered = filtered.filter(s=>String(s["Email Address"]).toLowerCase()===email);
+  if(name) filtered = filtered.filter(s=>String(s["Name"]).toLowerCase().includes(name));
+  if(dept) filtered = filtered.filter(s=>String(s["Department"])===dept);
+
+  if(!filtered.length) {
+    alert("❌ No records found.");
+    document.getElementById("resultSection").classList.add("hidden");
+    document.getElementById("avgPoints").textContent = "0";
+    document.getElementById("studentPoints").textContent = "0";
+    document.getElementById("remainingPoints").textContent = "0";
+    return;
+  }
+
+  const student = filtered[0];
+
+  // Total student points
+  let studentTotal = 0;
+  headers.forEach(h => { if(h.startsWith("RP_")) studentTotal += Number(student[h]) || 0; });
+
+  // Average points per student
+  const totalPointsAll = students.map(s => {
+    return headers.reduce((sum, h) => h.startsWith("RP_") ? sum + (Number(s[h])||0) : sum, 0);
+  });
+  const avgPoints = totalPointsAll.length ? (totalPointsAll.reduce((a,b)=>a+b,0)/totalPointsAll.length).toFixed(2) : 0;
+
+  const remainingPoints = Math.max(0, avgPoints - studentTotal);
+
+  document.getElementById("avgPoints").textContent = avgPoints;
+  document.getElementById("studentPoints").textContent = studentTotal;
+  document.getElementById("remainingPoints").textContent = remainingPoints;
+
+  // Display student details
+  const infoDiv = document.getElementById("studentInfo");
+  infoDiv.innerHTML = `
+    <div><strong>Name:</strong> ${student["Name"]}</div>
+    <div><strong>Register No:</strong> ${student["Register No"]}</div>
+    <div><strong>Email:</strong> ${student["Email Address"]}</div>
+    <div><strong>Department:</strong> ${student["Department"]}</div>
+    <div><strong>Year:</strong> 2nd Year</div>
+  `;
+
+  // Activity Table
+  const activityBody = document.getElementById("resultTable");
+  activityBody.innerHTML="";
+  let sno=1;
+  headers.forEach(h => {
+    if(h.startsWith("RP_") && (!activity || h===activity)) {
+      const points = Number(student[h]) || 0;
+      if(points>0){
+        const {date, activity: activityName} = parseActivityDetails(h);
+        activityBody.innerHTML += `
+          <tr class="hover:bg-indigo-50 transition-colors">
+            <td class="px-6 py-4">${sno++}</td>
+            <td class="px-6 py-4 font-medium">${activityName}</td>
+            <td class="px-6 py-4 text-gray-500">${date}</td>
+            <td class="px-6 py-4 font-semibold text-indigo-700">${points}</td>
+          </tr>
+        `;
+      }
+    }
+  });
+
+  // Total Row
+  if(!activity){
+    activityBody.innerHTML += `
+      <tr class="bg-indigo-50 font-bold">
+        <td class="px-6 py-4" colspan="3">Total</td>
+        <td class="px-6 py-4 text-green-700">${studentTotal}</td>
+      </tr>
+    `;
+  }
+
+  document.getElementById("resultSection").classList.remove("hidden");
+}
+
+loadData();
+</script>
+
+</body>
+</html>
