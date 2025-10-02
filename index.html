@@ -66,31 +66,54 @@
             <option value="">Select Activity</option>
           </select>
         </div>
+        <!-- Academic Year -->
+      <div>
+      <label class="block text-sm font-medium mb-1">Academic Year</label>
+      <select id="academicYear"
+        class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+        <option value="">Select Academic Year</option>
+        <option value="1st year">1st year</option>
+        <option value="2nd year">2nd year</option>
+        <option value="3rd year">3rd year</option>
+        <option value="4th year">4th year</option>
+      </select>
       </div>
+    </div>
+
+      
+
 
       <!-- Reward Points Box -->
-      <div class="mt-6">
-        <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 grid grid-cols-1 sm:grid-cols-3 gap-4 h-28">
-          <div class="flex flex-col justify-center items-center">
-            <span class="text-gray-500 text-sm font-medium">Average Reward Points</span>
-            <span id="avgPoints" class="text-indigo-700 font-bold text-lg">0</span>
-          </div>
-          <div class="flex flex-col justify-center items-center">
-            <span class="text-gray-500 text-sm font-medium">Your Points</span>
-            <span id="studentPoints" class="text-green-600 font-bold text-lg">0</span>
-          </div>
-          <div class="flex flex-col justify-center items-center">
-            <span class="text-gray-500 text-sm font-medium">Required Points for Average</span>
-            <span id="remainingPoints" class="text-red-600 font-bold text-lg">0</span>
-          </div>
-        </div>
-      </div>
+<div class="mt-6">
+  <div class="flex flex-wrap gap-4">
+    
+    <!-- Average Points -->
+    <div class="flex-1 min-w-[220px] bg-white border border-indigo-200 shadow-md rounded-xl p-4 flex flex-col justify-center items-center">
+      <span class="text-gray-500 text-sm font-medium">Average Reward Points</span>
+      <span id="avgPoints" class="text-indigo-700 font-bold text-xl mt-1">0</span>
+    </div>
+    
+    <!-- Your Points -->
+    <div class="flex-1 min-w-[220px] bg-white border border-green-200 shadow-md rounded-xl p-4 flex flex-col justify-center items-center">
+      <span class="text-gray-500 text-sm font-medium">Your Points</span>
+      <span id="studentPoints" class="text-green-600 font-bold text-xl mt-1">0</span>
+    </div>
+    
+    <!-- Remaining Points -->
+    <div class="flex-1 min-w-[220px] bg-white border border-red-200 shadow-md rounded-xl p-4 flex flex-col justify-center items-center">
+      <span class="text-gray-500 text-sm font-medium">Required Points for Average</span>
+      <span id="remainingPoints" class="text-red-600 font-bold text-xl mt-1">0</span>
+    </div>
 
-      <div class="flex justify-end mt-4">
+  </div>
+</div>
+
+
+      <div class="flex justify-end mt-8">
         <button onclick="searchStudent()"
-          class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 flex items-center space-x-2 shadow">
+          class="bg-indigo-600 text-white px-10 py-4 rounded-lg hover:bg-indigo-700 flex items-center space-x-2 shadow">
           <i data-lucide="search"></i>
-          <span>Search</span>
+          <span><b>Search details</b></span>
         </button>
       </div>
     </div>
@@ -267,4 +290,3 @@ loadData();
 
 </body>
 </html>
-
