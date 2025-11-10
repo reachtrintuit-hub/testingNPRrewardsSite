@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>NPR Reward Points Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -19,15 +19,32 @@
     </div>
   </header>
 
+  <!-- Notification area (errors / status) -->
+  <div id="statusBar" class="container mx-auto mt-4 px-6 hidden">
+    <div id="statusMessage" class="rounded-lg p-3 text-sm"></div>
+  </div>
+
   <!-- Search Section -->
-  <section class="container mx-auto mt-8 px-6">
+  <section class="container mx-auto mt-4 px-6">
     <div class="bg-white shadow-lg rounded-xl p-6">
       <h2 class="text-lg font-semibold flex items-center space-x-2 text-indigo-700 mb-6">
         <i data-lucide="search" class="w-5 h-5"></i>
         <span>Search Student</span>
       </h2>
 
+      <!-- Filters grid (max 3 per row) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+
+        <!-- Internal selector (IP1 / IP2) -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Internal</label>
+          <select id="internalSelect"
+            class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+            <option value="IP2">IP2 (default)</option>
+            <option value="IP1">IP1</option>
+          </select>
+        </div>
+
         <!-- Register No -->
         <div>
           <label class="block text-sm font-medium mb-1">Register No</label>
@@ -49,11 +66,11 @@
             class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none" />
         </div>
 
-        <!-- Department (Reduced width) -->
-        <div >
+        <!-- Department -->
+        <div>
           <label class="block text-sm font-medium mb-1">Department</label>
           <select id="department"
-            class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+            class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none" disabled>
             <option value="">Select Department</option>
           </select>
         </div>
@@ -62,56 +79,34 @@
         <div>
           <label class="block text-sm font-medium mb-1">Activity</label>
           <select id="activity"
-            class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+            class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none" disabled>
             <option value="">Select Activity</option>
           </select>
         </div>
-        <!-- Academic Year -->
-      <div>
-      <label class="block text-sm font-medium mb-1">Academic Year</label>
-      <select id="academicYear"
-        class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
-        <option value="">Select Academic Year</option>
-        <option value="1st year">1st year</option>
-        <option value="2nd year">2nd year</option>
-        <option value="3rd year">3rd year</option>
-        <option value="4th year">4th year</option>
-      </select>
+
       </div>
-    </div>
 
-      
-
-
-      <!-- Reward Points Box -->
-<div class="mt-6">
-  <div class="flex flex-wrap gap-4">
-    
-    <!-- Average Points -->
-    <div class="flex-1 min-w-[220px] bg-white border border-indigo-200 shadow-md rounded-xl p-4 flex flex-col justify-center items-center">
-      <span class="text-gray-500 text-sm font-medium">Average Reward Points</span>
-      <span id="avgPoints" class="text-indigo-700 font-bold text-xl mt-1">0</span>
-    </div>
-    
-    <!-- Your Points -->
-    <div class="flex-1 min-w-[220px] bg-white border border-green-200 shadow-md rounded-xl p-4 flex flex-col justify-center items-center">
-      <span class="text-gray-500 text-sm font-medium">Your Points</span>
-      <span id="studentPoints" class="text-green-600 font-bold text-xl mt-1">0</span>
-    </div>
-    
-    <!-- Remaining Points -->
-    <div class="flex-1 min-w-[220px] bg-white border border-red-200 shadow-md rounded-xl p-4 flex flex-col justify-center items-center">
-      <span class="text-gray-500 text-sm font-medium">Required Points for Average</span>
-      <span id="remainingPoints" class="text-red-600 font-bold text-xl mt-1">0</span>
-    </div>
-
-  </div>
-</div>
-
+      <!-- Reward Points Cards -->
+      <div class="mt-6">
+        <div class="flex flex-wrap gap-4">
+          <div class="flex-1 min-w-[220px] bg-white border border-indigo-200 shadow-md rounded-xl p-4 flex flex-col justify-center items-center">
+            <span class="text-gray-500 text-sm font-medium">Average Reward Points</span>
+            <span id="avgPoints" class="text-indigo-700 font-bold text-xl mt-1">0</span>
+          </div>
+          <div class="flex-1 min-w-[220px] bg-white border border-green-200 shadow-md rounded-xl p-4 flex flex-col justify-center items-center">
+            <span class="text-gray-500 text-sm font-medium">Your Points</span>
+            <span id="studentPoints" class="text-green-600 font-bold text-xl mt-1">0</span>
+          </div>
+          <div class="flex-1 min-w-[220px] bg-white border border-red-200 shadow-md rounded-xl p-4 flex flex-col justify-center items-center">
+            <span class="text-gray-500 text-sm font-medium">Required Points for Average</span>
+            <span id="remainingPoints" class="text-red-600 font-bold text-xl mt-1">0</span>
+          </div>
+        </div>
+      </div>
 
       <div class="flex justify-end mt-8">
-        <button onclick="searchStudent()"
-          class="bg-indigo-600 text-white px-10 py-4 rounded-lg hover:bg-indigo-700 flex items-center space-x-2 shadow">
+        <button id="searchBtn"
+          class="bg-indigo-600 text-white px-10 py-3 rounded-lg hover:bg-indigo-700 flex items-center space-x-2 shadow">
           <i data-lucide="search"></i>
           <span><b>Search details</b></span>
         </button>
@@ -148,146 +143,319 @@
   </section>
 
 <script>
-const sheetId = "1Qzvivw20a6tYYYpnxWfzHDKvKdeyQ_JjboJItgEFcak";
-const sheetName = "RewardPoints_All_2ndYears_NPR";
-const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${sheetName}`;
-let students = [], headers = [];
+  lucide.createIcons();
 
-// Load Google Sheet Data
-async function loadData() {
-  try {
-    const res = await fetch(sheetUrl);
-    const text = await res.text();
-    const json = JSON.parse(text.substr(47).slice(0, -2));
+  // sheet mapping
+  const SHEETS = {
+    IP1: {
+      id: "1Qzvivw20a6tYYYpnxWfzHDKvKdeyQ_JjboJItgEFcak",
+      name: "RewardPoints_All_2ndYears_NPR"
+    },
+    IP2: {
+      id: "1iFdUps38F_cibF2r6chg3v9yPY-ByXKbuOtZ3WUenWc",
+      name: "RewardPoints_All_2ndYears_IP2NPR"
+    }
+  };
 
-    headers = json.table.cols.map(c => c.label?.trim()).filter(Boolean);
-    const rows = json.table.rows;
-    students = rows.map(r => {
-      const obj = {};
-      headers.forEach((h,i) => obj[h]= r.c[i]?.v || "");
-      return obj;
-    });
+  // state
+  let activeInternal = "IP2"; // default
+  let students = [];         // current sheet students
+  let headers = [];          // current sheet headers
+  let headerMap = {};        // normalized header -> original label
 
-    // Populate Department Dropdown
-    const deptInput = document.getElementById("department");
-    const depts = [...new Set(students.map(s=>s["Department"]?.trim()))].filter(Boolean).sort();
-    depts.forEach(d => deptInput.innerHTML += `<option value="${d}">${d}</option>`);
+  // helpful selectors
+  const internalSelect = document.getElementById("internalSelect");
+  const deptEl = document.getElementById("department");
+  const activityEl = document.getElementById("activity");
+  const regEl = document.getElementById("regno");
+  const emailEl = document.getElementById("email");
+  const nameEl = document.getElementById("name");
+  const searchBtn = document.getElementById("searchBtn");
+  const resultSection = document.getElementById("resultSection");
+  const studentInfo = document.getElementById("studentInfo");
+  const resultTable = document.getElementById("resultTable");
+  const avgPointsEl = document.getElementById("avgPoints");
+  const studentPointsEl = document.getElementById("studentPoints");
+  const remainingPointsEl = document.getElementById("remainingPoints");
+  const statusBar = document.getElementById("statusBar");
+  const statusMessage = document.getElementById("statusMessage");
 
-    // Populate Activity Dropdown
-    const activityInput = document.getElementById("activity");
-    headers.forEach(h => {
-      if (h.startsWith("RP_")) {
-        const label = h.replace("RP_", "").replace(/_/g, " ");
-        activityInput.innerHTML += `<option value="${h}">${label}</option>`;
+  function showStatus(message, type="info") {
+    // type: info | success | error
+    statusBar.classList.remove("hidden");
+    statusMessage.textContent = message;
+    statusMessage.className = "rounded-lg p-3 text-sm";
+    if (type === "error") {
+      statusMessage.classList.add("bg-red-50", "text-red-700", "border", "border-red-100");
+    } else if (type === "success") {
+      statusMessage.classList.add("bg-green-50", "text-green-700", "border", "border-green-100");
+    } else {
+      statusMessage.classList.add("bg-yellow-50", "text-yellow-700", "border", "border-yellow-100");
+    }
+  }
+
+  // toggle inputs enabled/disabled
+  function setFiltersEnabled(enabled) {
+    deptEl.disabled = !enabled;
+    activityEl.disabled = !enabled;
+    regEl.disabled = !enabled;
+    emailEl.disabled = !enabled;
+    nameEl.disabled = !enabled;
+    searchBtn.disabled = !enabled;
+    if (enabled) {
+      deptEl.classList.remove("opacity-50");
+      activityEl.classList.remove("opacity-50");
+    } else {
+      deptEl.classList.add("opacity-50");
+      activityEl.classList.add("opacity-50");
+    }
+  }
+
+  // normalize header label for stable lookup
+  function normalizeLabel(label) {
+    return (label||"").toString().trim().toLowerCase();
+  }
+
+  // fetch sheet data for active internal — returns true on success, false on failure
+  async function loadSheet(internalKey) {
+    resultSection.classList.add("hidden");
+    avgPointsEl.textContent = "0";
+    studentPointsEl.textContent = "0";
+    remainingPointsEl.textContent = "0";
+    deptEl.innerHTML = `<option value="">Select Department</option>`;
+    activityEl.innerHTML = `<option value="">Select Activity</option>`;
+    showStatus("Loading sheet data for " + internalKey + " ...", "info");
+
+    try {
+      const sheet = SHEETS[internalKey];
+      if (!sheet) throw new Error("Sheet config missing for " + internalKey);
+
+      const url = `https://docs.google.com/spreadsheets/d/${sheet.id}/gviz/tq?sheet=${encodeURIComponent(sheet.name)}`;
+      const res = await fetch(url, {cache: "no-store"});
+      if (!res.ok) {
+        // non-200 status
+        const preview = await res.text().then(t => t.slice(0,1000));
+        console.error("Non-OK response fetching sheet:", res.status, preview);
+        showStatus(`Error loading sheet (HTTP ${res.status}). Check sheet sharing & sheet name.`, "error");
+        return false;
       }
+
+      const text = await res.text();
+
+      // If the response contains HTML (Google sign-in or an error page) it's likely a permission issue.
+      if (text.trim().startsWith("<!DOCTYPE html") || text.toLowerCase().includes("signin") || text.toLowerCase().includes("google accounts")) {
+        console.error("Response looks like HTML (possible permission/sign-in page). Preview:", text.slice(0,1200));
+        showStatus("Sheet fetch returned an HTML page (likely the sheet is not public). Make the sheet 'Anyone with link - Viewer' or Publish to web.", "error");
+        return false;
+      }
+
+      // parse gviz JSON wrapper
+      let json;
+      try {
+        json = JSON.parse(text.substr(47).slice(0, -2));
+      } catch (parseErr) {
+        console.error("Failed to parse gviz JSON:", parseErr, "preview:", text.slice(0,500));
+        showStatus("Failed to parse sheet response — check sheet name/format. See console.", "error");
+        return false;
+      }
+
+      headers = json.table.cols.map(c => c.label?.trim() || "").filter(Boolean);
+      headerMap = {};
+      headers.forEach(h => headerMap[normalizeLabel(h)] = h);
+
+      const rows = json.table.rows || [];
+      students = rows.map(r => {
+        const obj = {};
+        headers.forEach((h,i) => obj[h] = r.c[i]?.v ?? "");
+        return obj;
+      });
+
+      // populate department dropdown
+      const deptHeaderKey = Object.keys(headerMap).find(k => k.includes("department"));
+      const deptHeader = deptHeaderKey ? headerMap[deptHeaderKey] : null;
+      const depts = [...new Set(students.map(s => (deptHeader ? (s[deptHeader]||"") : "").toString().trim()).filter(Boolean))].sort();
+      depts.forEach(d => {
+        const opt = document.createElement("option");
+        opt.value = d;
+        opt.textContent = d;
+        deptEl.appendChild(opt);
+      });
+
+      // populate activity dropdown from RP_ columns
+      const rpHeaders = headers.filter(h => h.startsWith("RP_"));
+      rpHeaders.forEach(h => {
+        const label = h.replace(/^RP_/, "").replace(/_/g, " ");
+        const opt = document.createElement("option");
+        opt.value = h;
+        opt.textContent = label;
+        activityEl.appendChild(opt);
+      });
+
+      showStatus(`Loaded ${students.length} rows from ${internalKey}.`, "success");
+      return true;
+    } catch (err) {
+      console.error("Failed to load sheet:", err);
+      showStatus("Unexpected error while loading sheet. See console for details.", "error");
+      return false;
+    }
+  }
+
+  // parse activity details (date + cleaned name)
+  function parseActivityDetails(columnName) {
+    const parts = columnName.split("_");
+    let date = "";
+    parts.forEach(p => {
+      if (/^\d{2}\.\d{2}\.\d{4}$/.test(p)) date = p;
     });
-
-    lucide.createIcons();
-  } catch(e) {
-    console.error(e);
-    alert("❌ Failed to load data.");
-  }
-}
-
-// Parse activity column
-function parseActivityDetails(columnName) {
-  const parts = columnName.split("_");
-  let date="", activity="";
-  parts.forEach(p => {
-    if(/^\d{2}\.\d{2}\.\d{4}$/.test(p)) date=p;
-  });
-  activity = parts.filter(p => p!=="RP" && !/^\d{1,2}yr$/.test(p) && !/^\d{2}\.\d{2}\.\d{4}$/.test(p)).join(" ");
-  return {date, activity};
-}
-
-// Search + Display
-function searchStudent() {
-  const roll = document.getElementById("regno").value.trim().toLowerCase();
-  const email = document.getElementById("email").value.trim().toLowerCase();
-  const name = document.getElementById("name").value.trim().toLowerCase();
-  const dept = document.getElementById("department").value;
-  const activity = document.getElementById("activity").value;
-
-  let filtered = students;
-  if(roll) filtered = filtered.filter(s=>String(s["Register No"]).toLowerCase()===roll);
-  if(email) filtered = filtered.filter(s=>String(s["Email Address"]).toLowerCase()===email);
-  if(name) filtered = filtered.filter(s=>String(s["Name"]).toLowerCase().includes(name));
-  if(dept) filtered = filtered.filter(s=>String(s["Department"])===dept);
-
-  if(!filtered.length) {
-    alert("❌ No records found.");
-    document.getElementById("resultSection").classList.add("hidden");
-    document.getElementById("avgPoints").textContent = "0";
-    document.getElementById("studentPoints").textContent = "0";
-    document.getElementById("remainingPoints").textContent = "0";
-    return;
+    const activity = parts.filter(p => p !== "RP" && !/^\d{1,2}yr$/.test(p) && !/^\d{2}\.\d{2}\.\d{4}$/.test(p)).join(" ");
+    return { date, activity };
   }
 
-  const student = filtered[0];
+  // compute average across students (preferred Total column)
+  function computeAverageAndTotals() {
+    const totalHeaderKey = Object.keys(headerMap).find(k => k === "total");
+    if (totalHeaderKey && headerMap[totalHeaderKey]) {
+      const totalHeader = headerMap[totalHeaderKey];
+      const totals = students.map(s => Number(s[totalHeader]) || 0);
+      const validCount = totals.filter(v => v > 0).length;
+      if (validCount >= students.length * 0.5) {
+        const sum = totals.reduce((a,b)=>a+b,0);
+        const avg = students.length ? (sum / students.length) : 0;
+        return { avg: Number(avg), method: "totalColumn" };
+      }
+    }
+    const rpHeaders = headers.filter(h => h.startsWith("RP_"));
+    const perStudentSums = students.map(s => rpHeaders.reduce((acc,h) => acc + (Number(s[h]) || 0), 0));
+    const sumAll = perStudentSums.reduce((a,b)=>a+b,0);
+    const avg = students.length ? (sumAll / students.length) : 0;
+    return { avg: Number(avg), method: "rpSum" };
+  }
 
-  // Total student points
-  let studentTotal = 0;
-  headers.forEach(h => { if(h.startsWith("RP_")) studentTotal += Number(student[h]) || 0; });
+  // search and render
+  function searchStudent() {
+    resultSection.classList.add("hidden");
+    resultTable.innerHTML = "";
+    studentInfo.innerHTML = "";
 
-  // Average points per student
-  const totalPointsAll = students.map(s => {
-    return headers.reduce((sum, h) => h.startsWith("RP_") ? sum + (Number(s[h])||0) : sum, 0);
-  });
-  const avgPoints = totalPointsAll.length ? (totalPointsAll.reduce((a,b)=>a+b,0)/totalPointsAll.length).toFixed(2) : 0;
+    const roll = regEl.value.trim().toLowerCase();
+    const email = emailEl.value.trim().toLowerCase();
+    const name = nameEl.value.trim().toLowerCase();
+    const deptVal = deptEl.value;
+    const activityFilter = activityEl.value;
 
-  const remainingPoints = Math.max(0, avgPoints - studentTotal);
+    const registerHeader = headerMap[Object.keys(headerMap).find(k => k.includes("register no") || k.includes("register") || k.includes("reg"))] || headerMap[Object.keys(headerMap).find(k => k.includes("register no"))];
+    const emailHeader = headerMap[Object.keys(headerMap).find(k => k.includes("email"))];
+    const nameHeader = headerMap[Object.keys(headerMap).find(k => k.includes("name"))];
+    const deptHeader = headerMap[Object.keys(headerMap).find(k => k.includes("department"))];
 
-  document.getElementById("avgPoints").textContent = avgPoints;
-  document.getElementById("studentPoints").textContent = studentTotal;
-  document.getElementById("remainingPoints").textContent = remainingPoints;
+    let filtered = students;
 
-  // Display student details
-  const infoDiv = document.getElementById("studentInfo");
-  infoDiv.innerHTML = `
-    <div><strong>Name:</strong> ${student["Name"]}</div>
-    <div><strong>Register No:</strong> ${student["Register No"]}</div>
-    <div><strong>Email:</strong> ${student["Email Address"]}</div>
-    <div><strong>Department:</strong> ${student["Department"]}</div>
-    <div><strong>Year:</strong> 2nd Year</div>
-  `;
+    if (registerHeader && roll) filtered = filtered.filter(s => String(s[registerHeader]).toLowerCase() === roll);
+    if (emailHeader && email) filtered = filtered.filter(s => String(s[emailHeader]).toLowerCase() === email);
+    if (nameHeader && name) filtered = filtered.filter(s => String(s[nameHeader]).toLowerCase().includes(name));
+    if (deptHeader && deptVal) filtered = filtered.filter(s => String(s[deptHeader]).trim() === deptVal);
 
-  // Activity Table
-  const activityBody = document.getElementById("resultTable");
-  activityBody.innerHTML="";
-  let sno=1;
-  headers.forEach(h => {
-    if(h.startsWith("RP_") && (!activity || h===activity)) {
+    if (!filtered.length && (roll || email || name || deptVal)) {
+      filtered = students.filter(s => {
+        let ok = true;
+        if (roll) {
+          const r = registerHeader ? String(s[registerHeader]).toLowerCase() : "";
+          ok = ok && (r === roll);
+        }
+        if (email) {
+          const e = emailHeader ? String(s[emailHeader]).toLowerCase() : "";
+          ok = ok && (e === email);
+        }
+        if (name) {
+          const n = nameHeader ? String(s[nameHeader]).toLowerCase() : "";
+          ok = ok && n.includes(name);
+        }
+        if (deptVal) {
+          const d = deptHeader ? String(s[deptHeader]).trim() : "";
+          ok = ok && (d === deptVal);
+        }
+        return ok;
+      });
+    }
+
+    if (!filtered.length) {
+      alert("❌ No records found.");
+      avgPointsEl.textContent = "0";
+      studentPointsEl.textContent = "0";
+      remainingPointsEl.textContent = "0";
+      return;
+    }
+
+    const student = filtered[0];
+
+    const rpHeaders = headers.filter(h => h.startsWith("RP_"));
+    const studentTotal = rpHeaders.reduce((acc,h) => acc + (Number(student[h]) || 0), 0);
+
+    const avgResult = computeAverageAndTotals();
+    const avgPoints = Number(avgResult.avg).toFixed(2);
+    const remaining = Math.max(0, Number(avgPoints) - studentTotal);
+
+    avgPointsEl.textContent = avgPoints;
+    studentPointsEl.textContent = studentTotal;
+    remainingPointsEl.textContent = remaining;
+
+    studentInfo.innerHTML = `
+      <div><strong>Name:</strong> ${nameHeader ? (student[nameHeader] || "") : (student["Name"]||"")}</div>
+      <div><strong>Register No:</strong> ${registerHeader ? (student[registerHeader] || "") : (student["Register No"]||"")}</div>
+      <div><strong>Email:</strong> ${emailHeader ? (student[emailHeader] || "") : (student["Email Address"]||"")}</div>
+      <div><strong>Department:</strong> ${deptHeader ? (student[deptHeader] || "") : (student["Department"]||"")}</div>
+      <div><strong>Year:</strong> 2nd Year</div>
+    `;
+
+    resultTable.innerHTML = "";
+    let sno = 1;
+    rpHeaders.forEach(h => {
+      if (activityFilter && activityFilter !== h) return;
       const points = Number(student[h]) || 0;
-      if(points>0){
-        const {date, activity: activityName} = parseActivityDetails(h);
-        activityBody.innerHTML += `
+      if (points > 0) {
+        const { date, activity } = parseActivityDetails(h);
+        resultTable.innerHTML += `
           <tr class="hover:bg-indigo-50 transition-colors">
             <td class="px-6 py-4">${sno++}</td>
-            <td class="px-6 py-4 font-medium">${activityName}</td>
+            <td class="px-6 py-4 font-medium">${activity}</td>
             <td class="px-6 py-4 text-gray-500">${date}</td>
             <td class="px-6 py-4 font-semibold text-indigo-700">${points}</td>
           </tr>
         `;
       }
-    }
-  });
+    });
 
-  // Total Row
-  if(!activity){
-    activityBody.innerHTML += `
-      <tr class="bg-indigo-50 font-bold">
-        <td class="px-6 py-4" colspan="3">Total</td>
-        <td class="px-6 py-4 text-green-700">${studentTotal}</td>
-      </tr>
-    `;
+    if (!activityFilter) {
+      resultTable.innerHTML += `
+        <tr class="bg-indigo-50 font-bold">
+          <td class="px-6 py-4" colspan="3">Total</td>
+          <td class="px-6 py-4 text-green-700">${studentTotal}</td>
+        </tr>
+      `;
+    }
+
+    resultSection.classList.remove("hidden");
   }
 
-  document.getElementById("resultSection").classList.remove("hidden");
-}
+  // when internal changed -> load that sheet
+  internalSelect.addEventListener("change", async function() {
+    activeInternal = internalSelect.value || "IP2";
+    setFiltersEnabled(false);
+    const ok = await loadSheet(activeInternal);
+    setFiltersEnabled(ok);
+  });
 
-loadData();
+  // search button handler
+  document.getElementById("searchBtn").addEventListener("click", searchStudent);
+
+  // init: default IP2 selected and loaded; enable filters only if load succeeds
+  (async function init() {
+    internalSelect.value = "IP2";
+    const ok = await loadSheet("IP2");
+    setFiltersEnabled(ok);
+  })();
+
 </script>
 
 </body>
 </html>
-
