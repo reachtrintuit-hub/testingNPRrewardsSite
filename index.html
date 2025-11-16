@@ -8,8 +8,6 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
-
-  <!-- Header -->
   <header class="bg-white shadow-md sticky top-0 z-50">
     <div class="container mx-auto flex items-center justify-between px-6 py-4">
       <div class="flex items-center space-x-3">
@@ -19,63 +17,51 @@
     </div>
   </header>
 
-  <!-- Notification area (errors / status) -->
   <div id="statusBar" class="container mx-auto mt-4 px-6 hidden">
     <div id="statusMessage" class="rounded-lg p-3 text-sm"></div>
   </div>
 
-  <!-- Search Section -->
   <section class="container mx-auto mt-4 px-6">
     <div class="bg-white shadow-lg rounded-xl p-6">
       <h2 class="text-lg font-semibold flex items-center space-x-2 text-indigo-700 mb-6">
         <i data-lucide="search" class="w-5 h-5"></i>
         <span>Search Student</span>
       </h2>
-
-      <!-- Filters grid (max 3 per row) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-
-        <!-- Internal selector (IP1 / IP2) -->
         <div>
           <label class="block text-sm font-medium mb-1">Internal</label>
           <select id="internalSelect"
             class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
-            <option value="IP2">IP2 (default)</option>
+            <option value="IP2">IP2</option>
             <option value="IP1">IP1</option>
           </select>
         </div>
-
-        <!-- Register No -->
         <div>
-          <label class="block text-sm font-medium mb-1">Register No</label>
+        <label class="block text-sm font-medium mb-1" for="department">
+            Register No <span class="text-lg text-red-500"><b>*</b></span>
+        </label>
           <input id="regno" type="text" placeholder="Ex: 583224103000"
             class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none" />
         </div>
-
-        <!-- Email -->
         <div>
           <label class="block text-sm font-medium mb-1">Email</label>
           <input id="email" type="text" placeholder="Ex: name@email.com"
             class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none" />
         </div>
-
-        <!-- Name -->
         <div>
           <label class="block text-sm font-medium mb-1">Name</label>
           <input id="name" type="text" placeholder="Ex: Arun"
             class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none" />
         </div>
-
-        <!-- Department -->
         <div>
-          <label class="block text-sm font-medium mb-1">Department</label>
+        <label class="block text-sm font-medium mb-1" for="department">
+            Department <span class="text-lg text-red-500"><b>*</b></span>
+        </label>
           <select id="department"
             class="w-full border rounded-lg px-3 py-2 h-12 focus:ring-2 focus:ring-indigo-400 focus:outline-none" disabled>
             <option value="">Select Department</option>
           </select>
         </div>
-
-        <!-- Activity -->
         <div>
           <label class="block text-sm font-medium mb-1">Activity</label>
           <select id="activity"
@@ -83,10 +69,7 @@
             <option value="">Select Activity</option>
           </select>
         </div>
-
       </div>
-
-      <!-- Reward Points Cards -->
       <div class="mt-6">
         <div class="flex flex-wrap gap-4">
           <div class="flex-1 min-w-[220px] bg-white border border-indigo-200 shadow-md rounded-xl p-4 flex flex-col justify-center items-center">
@@ -103,7 +86,6 @@
           </div>
         </div>
       </div>
-
       <div class="flex justify-end mt-8">
         <button id="searchBtn"
           class="bg-indigo-600 text-white px-10 py-3 rounded-lg hover:bg-indigo-700 flex items-center space-x-2 shadow">
@@ -114,56 +96,214 @@
     </div>
   </section>
 
-  <!-- Result Section -->
   <section class="container mx-auto mt-8 px-6 mb-12 hidden" id="resultSection">
     <div class="bg-white shadow-lg rounded-xl overflow-hidden">
-
-      <!-- Student Details -->
       <div class="px-6 py-4 border-b bg-indigo-50">
         <h3 class="text-lg font-bold text-indigo-700 mb-4">Student Details</h3>
         <div id="studentInfo" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-800 text-sm"></div>
       </div>
-
-      <!-- Activity Table -->
       <div class="overflow-x-auto p-6">
         <table class="min-w-full table-auto border border-gray-200 divide-y divide-gray-200 rounded-xl shadow-sm">
           <thead class="bg-indigo-600 text-white">
             <tr>
-              <th class="px-6 py-4 text-left font-semibold tracking-wide">S.No</th>
-              <th class="px-6 py-4 text-left font-semibold tracking-wide">Activity</th>
-              <th class="px-6 py-4 text-left font-semibold tracking-wide">Date</th>
-              <th class="px-6 py-4 text-left font-semibold tracking-wide">Points</th>
+              <th class="px-4 py-3">S.No</th>
+              <th class="px-4 py-3">Activity Name</th>
+              <th class="px-4 py-3">Date Start</th>
+              <th class="px-4 py-3">Date End</th>
+              <th class="px-4 py-3">For Who</th>
+              <th class="px-4 py-3">Year</th>
+              <th class="px-4 py-3">Category</th>
+              <th class="px-4 py-3">Max Points</th>
+              <th class="px-4 py-3">Your Points</th>
             </tr>
           </thead>
           <tbody id="resultTable" class="bg-white divide-y divide-gray-200"></tbody>
+          <tfoot id="resultFooter" class="bg-gray-50"></tfoot>
         </table>
-      </div>
 
+        <div id="paginationControls" class="mt-4 w-full flex flex-col gap-3 items-stretch md:flex-row md:items-center md:justify-between hidden h-14 md:h-14">
+          <div class="flex items-center gap-2 md:gap-3 md:flex-none h-full">
+              <label class="text-sm text-gray-600 whitespace-nowrap">Rows per page</label>
+              <select id="pageSizeSelect"
+              class="border rounded px-2 py-1 w-full md:w-24 h-10">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="40">40</option>
+              <option value="50">50</option>
+              </select>
+          </div>
+          <div id="pageInfo" class="text-sm text-gray-600 text-center md:text-left flex-1 md:flex-none self-center h-full flex items-center justify-center md:justify-start">
+            Showing 0-0 of 0
+          </div>
+          <div class="flex items-center gap-2 justify-end md:justify-end md:flex-none h-full">
+            <button id="prevPageBtn" class="px-3 py-1 border rounded w-full md:w-auto disabled:opacity-40 h-10">Prev</button>
+            <button id="nextPageBtn" class="px-3 py-1 border rounded w-full md:w-auto disabled:opacity-40 h-10">Next</button>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <section id="internalMarksContainer" class="mt-8 hidden">
+      <div class="bg-white shadow-md rounded-xl p-4">
+        <div class="flex items-center justify-between mb-4">
+          <h4 class="text-lg font-semibold text-indigo-700">Subject-wise Internal Marks</h4>
+          <div id="internalMarksNote" class="text-sm text-gray-600">Select Department to view marks</div>
+        </div>
+
+        <div id="internalMarksTableWrap" class="overflow-x-auto">
+          <table id="internalMarksTable" class="min-w-full table-auto border border-gray-200 divide-y divide-gray-200 rounded-xl shadow-sm">
+            <thead id="internalMarksThead" class="bg-indigo-700 text-white"></thead>
+            <tbody id="internalMarksTbody" class="bg-white text-sm"></tbody>
+            <tfoot id="internalMarksTfoot" class="bg-gray-50"></tfoot>
+          </table>
+        </div>
+
+        <div id="internalSummary" class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm text-gray-700">
+          <div class="bg-blue-50 border border-blue-500 rounded w-full p-3">
+            <div class="text-s text-gray-500">Your Reward Points</div> <br>
+            <div id="summaryTotalInternal" class="text-lg font-semibold">0</div>
+          </div>
+          <div class="bg-yellow-50 border border-yellow-500 rounded w-full p-3">
+            <div class="text-s text-gray-500">Allocated RP</div> <br>
+            <div id="summaryAllocatedRP" class="text-lg font-semibold">0</div>
+          </div>
+          <div class="bg-green-50 border border-green-500 rounded w-full p-3">
+            <div class="text-s text-gray-500">Balance RP</div> <br>
+            <div id="summaryBalanceRP" class="text-lg font-semibold">0</div>
+          </div>
+          <div class="bg-indigo-800 border border-indigo-500 rounded w-full p-3">
+            <div class="text-s text-white">Internal Mark (Out of Max)</div> <br>
+            <div id="summaryInternalOutOfMax" class="text-lg font-semibold text-white">0 / 0</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
   </section>
 
 <script>
   lucide.createIcons();
 
-  // sheet mapping
+  /***** CONFIG *****/
+  const CONFIG = { defaultInternal: "IP1" };
   const SHEETS = {
+    IP1: { id: "1Qzvivw20a6tYYYpnxWfzHDKvKdeyQ_JjboJItgEFcak", name: "RewardPoints_All_2ndYears_NPR" },
+    IP2: { id: "1iFdUps38F_cibF2r6chg3v9yPY-ByXKbuOtZ3WUenWc", name: "RewardPoints_All_2ndYears_IP2NPR" }
+  };
+  CONFIG.INTERNAL_MARKS_SHEETS = {
     IP1: {
-      id: "1Qzvivw20a6tYYYpnxWfzHDKvKdeyQ_JjboJItgEFcak",
-      name: "RewardPoints_All_2ndYears_NPR"
+      "Mech": { id: "10v8xWwaJ898ozPz_eu4qLTjk8bO5yh_X4YnhvowwDwk", name: "Mech" },
+      "IT": { id: "1XUpzTlUZp4po2CKY4YIp9sRB8FnQG2PDLDsY-5vFRco", name: "IT" },
+      "EEE": { id: "1urqNYgij0vNaBMMwLQoDRjqdR93g0M2Nz0WZgee0pws", name: "EEE" },
+      "ECE": { id: "192wDbp9clVDe_Y829bD_bCl_3BsmVljslrbdeQKSqEM", name: "ECE" },
+      "CSE": { id: "1wGj9RNlI8exqpbeoTKqljO-M4mt6mnB71nr-ZgTPXCY", name: "CSE" },
+      "Civil": { id: "1CZrO42vHfbT0Y_zr3Z_LdyoVsDXP-LaxHXKOpzDZpAw", name: "Civil" },
+      "AI & ML": { id: "1btkOifSS-3tjWdRYzRmkm3eedPh_njNsQ9dSJJSKtns", name: "AI & ML" },
+      "AI & DS": { id: "1PK2CVaeLii_deZISFpUsbvriCJEa74WEvu53HHfNVZ4", name: "AI & DS" }
     },
-    IP2: {
-      id: "1iFdUps38F_cibF2r6chg3v9yPY-ByXKbuOtZ3WUenWc",
-      name: "RewardPoints_All_2ndYears_IP2NPR"
-    }
+    IP2: { "Mech": { id: "<DUMMY_OR_REAL_ID_FOR_IP2_MECH>", name: "Mech_Internal_IP2" } }
   };
 
-  // state
-  let activeInternal = "IP2"; // default
-  let students = [];         // current sheet students
-  let headers = [];          // current sheet headers
-  let headerMap = {};        // normalized header -> original label
+  const CATEGORY_CODES = ['CD','PCDP','SM','AC','RPA','SPL','OT'];
+  const SYSTEM_HEADER_LABELS = ["email address","name","register no","department","total"];
+  function normalizeLabel(label) { return (label||"").toString().trim().toLowerCase(); }
+  function isSystemHeader(hdr) { return SYSTEM_HEADER_LABELS.includes(normalizeLabel(hdr)); }
+  function isTypeMarkerCell(val){
+    if (val==null) return false;
+    const s = String(val).trim().toLowerCase();
+    return /^(theory|lab|lab ?\+ ?theory|lab\+theory)$/i.test(s) || s.includes("lab") || s.includes("theory");
+  }
+  function isRPMarkerCell(val){
+    if (val==null) return false;
+    const s = String(val).trim().toLowerCase();
+    return s==="rp" || s==="r.p" || s==="reward points" || s==="reward" || s==="reward_points";
+  }
 
-  // helpful selectors
+  // --- Hardcoded subject definitions (place after CONFIG) ---
+  const deptSubjects = {
+    "AI & DS": [
+      { code: "23MA302", type: "Theory" },
+      { code: "23AD302", type: "Theory" },
+      { code: "23AD305", type: "Theory" },
+      { code: "23AD301", type: "Lab+Theory" },
+      { code: "23AD303", type: "Lab+Theory" },
+      { code: "23AD304", type: "Lab+Theory" },
+      { code: "23AD311", type: "Lab" },
+      { code: "23AD312", type: "Lab" }
+    ],
+    "CSE": [
+      { code: "23MA302", type: "Theory" },
+      { code: "23CS302", type: "Theory" },
+      { code: "23CS303", type: "Theory" },
+      { code: "23CS901", type: "Lab+Theory" },
+      { code: "23CS301", type: "Lab+Theory" },
+      { code: "23CS311", type: "Lab" },
+      { code: "23CS312", type: "Lab" }
+    ],
+    "IT": [
+      { code: "23MA302", type: "Theory" },
+      { code: "23CS302", type: "Theory" },
+      { code: "23CS303", type: "Theory" },
+      { code: "23CS901", type: "Lab+Theory" },
+      { code: "23IT301", type: "Lab+Theory" },
+      { code: "23CS311", type: "Lab" },
+      { code: "23CS312", type: "Lab" }
+    ],
+    "ECE": [
+      { code: "23MA303", type: "Theory" },
+      { code: "23AD306", type: "Theory" },
+      { code: "23EC301", type: "Theory" },
+      { code: "23EC303", type: "Theory" },
+      { code: "23GE902", type: "Theory" },
+      { code: "23EC302", type: "Lab+Theory" },
+      { code: "23AD313", type: "Lab" },
+      { code: "23EC311", type: "Lab" }
+    ],
+    "EEE": [
+      { code: "23MA901", type: "Theory" },
+      { code: "23EE301", type: "Theory" },
+      { code: "23EE302", type: "Theory" },
+      { code: "23EE303", type: "Theory" },
+      { code: "23EE304", type: "Theory" },
+      { code: "23CS304", type: "Lab+Theory" },
+      { code: "23EE311", type: "Lab" },
+      { code: "23EE312", type: "Lab" }
+    ],
+    "MECH": [
+      { code: "23MA301", type: "Theory" },
+      { code: "23ME301", type: "Theory" },
+      { code: "23ME303", type: "Theory" },
+      { code: "23GE902", type: "Theory" },
+      { code: "23ME302", type: "Lab+Theory" },
+      { code: "23ME311", type: "Lab" }
+    ],
+    "AI & ML": [
+      { code: "23MA302", type: "Theory" },
+      { code: "23CS302", type: "Theory" },
+      { code: "23CS303", type: "Theory" },
+      { code: "23CS901", type: "Lab+Theory" },
+      { code: "23CS301", type: "Lab+Theory" },
+      { code: "23CS311", type: "Lab" },
+      { code: "23CS312", type: "Lab" }
+    ],
+    "Civil": [
+      { code: "23MA301", type: "Theory" },
+      { code: "23CE301", type: "Theory" },
+      { code: "23CE302", type: "Theory" },
+      { code: "23CE303", type: "Theory" },
+      { code: "23CE304", type: "Theory" },
+      { code: "23CE311", type: "Lab" },
+      { code: "23CE312", type: "Lab" },
+      { code: "23CE313", type: "Lab" }
+    ]
+  };
+  const maxMap = { "Theory": 8, "Lab+Theory": 10, "Lab": 10 };
+
+  let activeInternal = CONFIG.defaultInternal || "IP1";
+  let students = [], headers = [], headerMap = {};
+
+  // state & DOM refs
+  let currentActivityRows = [], pageSize = 10, currentPage = 1;
   const internalSelect = document.getElementById("internalSelect");
   const deptEl = document.getElementById("department");
   const activityEl = document.getElementById("activity");
@@ -174,87 +314,65 @@
   const resultSection = document.getElementById("resultSection");
   const studentInfo = document.getElementById("studentInfo");
   const resultTable = document.getElementById("resultTable");
+  const resultFooter = document.getElementById("resultFooter");
   const avgPointsEl = document.getElementById("avgPoints");
   const studentPointsEl = document.getElementById("studentPoints");
   const remainingPointsEl = document.getElementById("remainingPoints");
   const statusBar = document.getElementById("statusBar");
   const statusMessage = document.getElementById("statusMessage");
+  const paginationControls = document.getElementById("paginationControls");
+  const pageSizeSelect = document.getElementById("pageSizeSelect");
+  const prevPageBtn = document.getElementById("prevPageBtn");
+  const nextPageBtn = document.getElementById("nextPageBtn");
+  const pageInfo = document.getElementById("pageInfo");
 
-  function showStatus(message, type="info") {
-    // type: info | success | error
+  // internal marks DOM
+  const internalMarksContainer = document.getElementById("internalMarksContainer");
+  const internalMarksNote = document.getElementById("internalMarksNote");
+  const internalMarksThead = document.getElementById("internalMarksThead");
+  const internalMarksTbody = document.getElementById("internalMarksTbody");
+  const internalMarksTfoot = document.getElementById("internalMarksTfoot");
+  const summaryTotalInternal = document.getElementById("summaryTotalInternal");
+  const summaryAllocatedRP = document.getElementById("summaryAllocatedRP");
+  const summaryBalanceRP = document.getElementById("summaryBalanceRP");
+  const summaryInternalOutOfMax = document.getElementById("summaryInternalOutOfMax");
+
+  function showStatus(message, type="info"){
     statusBar.classList.remove("hidden");
     statusMessage.textContent = message;
     statusMessage.className = "rounded-lg p-3 text-sm";
-    if (type === "error") {
-      statusMessage.classList.add("bg-red-50", "text-red-700", "border", "border-red-100");
-    } else if (type === "success") {
-      statusMessage.classList.add("bg-green-50", "text-green-700", "border", "border-green-100");
-    } else {
-      statusMessage.classList.add("bg-yellow-50", "text-yellow-700", "border", "border-yellow-100");
-    }
+    if (type === "error") statusMessage.classList.add("bg-red-50","text-red-700","border","border-red-100");
+    else if (type === "success") statusMessage.classList.add("bg-green-50","text-green-700","border","border-green-100");
+    else statusMessage.classList.add("bg-yellow-50","text-yellow-700","border","border-yellow-100");
   }
 
-  // toggle inputs enabled/disabled
-  function setFiltersEnabled(enabled) {
-    deptEl.disabled = !enabled;
-    activityEl.disabled = !enabled;
-    regEl.disabled = !enabled;
-    emailEl.disabled = !enabled;
-    nameEl.disabled = !enabled;
-    searchBtn.disabled = !enabled;
-    if (enabled) {
-      deptEl.classList.remove("opacity-50");
-      activityEl.classList.remove("opacity-50");
-    } else {
-      deptEl.classList.add("opacity-50");
-      activityEl.classList.add("opacity-50");
-    }
-  }
-
-  // normalize header label for stable lookup
-  function normalizeLabel(label) {
-    return (label||"").toString().trim().toLowerCase();
-  }
-
-  // fetch sheet data for active internal — returns true on success, false on failure
-  async function loadSheet(internalKey) {
+  async function loadSheet(internalKey){
     resultSection.classList.add("hidden");
-    avgPointsEl.textContent = "0";
-    studentPointsEl.textContent = "0";
-    remainingPointsEl.textContent = "0";
+    avgPointsEl.textContent = "0"; studentPointsEl.textContent = "0"; remainingPointsEl.textContent = "0";
     deptEl.innerHTML = `<option value="">Select Department</option>`;
     activityEl.innerHTML = `<option value="">Select Activity</option>`;
-    showStatus("Loading sheet data for " + internalKey + " ...", "info");
+    showStatus("Loading sheet data for " + internalKey + " ...","info");
 
-    try {
+    try{
       const sheet = SHEETS[internalKey];
       if (!sheet) throw new Error("Sheet config missing for " + internalKey);
-
       const url = `https://docs.google.com/spreadsheets/d/${sheet.id}/gviz/tq?sheet=${encodeURIComponent(sheet.name)}`;
-      const res = await fetch(url, {cache: "no-store"});
-      if (!res.ok) {
-        // non-200 status
+      const res = await fetch(url, { cache: "no-store" });
+      if(!res.ok){
         const preview = await res.text().then(t => t.slice(0,1000));
         console.error("Non-OK response fetching sheet:", res.status, preview);
         showStatus(`Error loading sheet (HTTP ${res.status}). Check sheet sharing & sheet name.`, "error");
         return false;
       }
-
       const text = await res.text();
-
-      // If the response contains HTML (Google sign-in or an error page) it's likely a permission issue.
-      if (text.trim().startsWith("<!DOCTYPE html") || text.toLowerCase().includes("signin") || text.toLowerCase().includes("google accounts")) {
+      if (text.trim().startsWith("<!DOCTYPE html") || text.toLowerCase().includes("signin") || text.toLowerCase().includes("google accounts")){
         console.error("Response looks like HTML (possible permission/sign-in page). Preview:", text.slice(0,1200));
-        showStatus("Sheet fetch returned an HTML page (likely the sheet is not public). Make the sheet 'Anyone with link - Viewer' or Publish to web.", "error");
+        showStatus("Sheet fetch returned HTML (likely the sheet is not public). Make the sheet 'Anyone with link - Viewer' or Publish to web.", "error");
         return false;
       }
-
-      // parse gviz JSON wrapper
       let json;
-      try {
-        json = JSON.parse(text.substr(47).slice(0, -2));
-      } catch (parseErr) {
-        console.error("Failed to parse gviz JSON:", parseErr, "preview:", text.slice(0,500));
+      try { json = JSON.parse(text.substr(47).slice(0, -2)); } catch(e){
+        console.error("Failed to parse gviz JSON:", e, "Preview:", text.slice(0,500));
         showStatus("Failed to parse sheet response — check sheet name/format. See console.", "error");
         return false;
       }
@@ -262,11 +380,10 @@
       headers = json.table.cols.map(c => c.label?.trim() || "").filter(Boolean);
       headerMap = {};
       headers.forEach(h => headerMap[normalizeLabel(h)] = h);
-
       const rows = json.table.rows || [];
       students = rows.map(r => {
         const obj = {};
-        headers.forEach((h,i) => obj[h] = r.c[i]?.v ?? "");
+        headers.forEach((h,i)=> obj[h] = r.c[i]?.v ?? "");
         return obj;
       });
 
@@ -274,45 +391,31 @@
       const deptHeaderKey = Object.keys(headerMap).find(k => k.includes("department"));
       const deptHeader = deptHeaderKey ? headerMap[deptHeaderKey] : null;
       const depts = [...new Set(students.map(s => (deptHeader ? (s[deptHeader]||"") : "").toString().trim()).filter(Boolean))].sort();
-      depts.forEach(d => {
-        const opt = document.createElement("option");
-        opt.value = d;
-        opt.textContent = d;
-        deptEl.appendChild(opt);
+      depts.forEach(d=>{
+        const opt=document.createElement("option"); opt.value=d; opt.textContent=d; deptEl.appendChild(opt);
       });
 
-      // populate activity dropdown from RP_ columns
-      const rpHeaders = headers.filter(h => h.startsWith("RP_"));
-      rpHeaders.forEach(h => {
-        const label = h.replace(/^RP_/, "").replace(/_/g, " ");
+      // Activity dropdown uses all activity columns
+      const activityHeaders = headers.filter(h => !isSystemHeader(h));
+      activityHeaders.forEach(h => {
+        const meta = parseActivityName(h);
+        const label = meta.activityName && meta.activityName !== meta.raw ? meta.activityName.replace(/_/g," ") : h.replace(/^RP_/,"").replace(/_/g," ");
         const opt = document.createElement("option");
-        opt.value = h;
-        opt.textContent = label;
-        activityEl.appendChild(opt);
+        opt.value = h; opt.textContent = label; activityEl.appendChild(opt);
       });
 
       showStatus(`Loaded ${students.length} rows from ${internalKey}.`, "success");
+      console.log("[DEBUG] sheet loaded:", internalKey, "headers:", headers.length, "rows:", students.length);
       return true;
-    } catch (err) {
+
+    } catch(err){
       console.error("Failed to load sheet:", err);
       showStatus("Unexpected error while loading sheet. See console for details.", "error");
       return false;
     }
   }
 
-  // parse activity details (date + cleaned name)
-  function parseActivityDetails(columnName) {
-    const parts = columnName.split("_");
-    let date = "";
-    parts.forEach(p => {
-      if (/^\d{2}\.\d{2}\.\d{4}$/.test(p)) date = p;
-    });
-    const activity = parts.filter(p => p !== "RP" && !/^\d{1,2}yr$/.test(p) && !/^\d{2}\.\d{2}\.\d{4}$/.test(p)).join(" ");
-    return { date, activity };
-  }
-
-  // compute average across students (preferred Total column)
-  function computeAverageAndTotals() {
+  function computeAverageAndTotals(){
     const totalHeaderKey = Object.keys(headerMap).find(k => k === "total");
     if (totalHeaderKey && headerMap[totalHeaderKey]) {
       const totalHeader = headerMap[totalHeaderKey];
@@ -324,18 +427,334 @@
         return { avg: Number(avg), method: "totalColumn" };
       }
     }
-    const rpHeaders = headers.filter(h => h.startsWith("RP_"));
-    const perStudentSums = students.map(s => rpHeaders.reduce((acc,h) => acc + (Number(s[h]) || 0), 0));
+    const activityHeaders = headers.filter(h => !isSystemHeader(h));
+    const perStudentSums = students.map(s => activityHeaders.reduce((acc,h) => acc + (Number(s[h]) || 0), 0));
     const sumAll = perStudentSums.reduce((a,b)=>a+b,0);
     const avg = students.length ? (sumAll / students.length) : 0;
-    return { avg: Number(avg), method: "rpSum" };
+    return { avg: Number(avg), method: "activitySum" };
   }
 
-  // search and render
+  function renderActivityTable(activityRows){
+    currentActivityRows = activityRows || [];
+    if (!pageSize || pageSize <= 0) pageSize = 10;
+    const totalRows = currentActivityRows.length;
+    const totalPages = Math.max(1, Math.ceil(totalRows / pageSize));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, totalRows);
+    const pageRows = currentActivityRows.slice(startIndex, endIndex);
+    let sno = startIndex + 1;
+    let rowsHTML = "";
+    pageRows.forEach(r => {
+      rowsHTML += `
+        <tr class="hover:bg-indigo-50 transition-colors">
+          <td class="px-4 py-3">${sno++}</td>
+          <td class="px-4 py-3 font-medium">${r.displayName}</td>
+          <td class="px-4 py-3">${r.meta.dateStart || ""}</td>
+          <td class="px-4 py-3">${r.meta.dateEnd || ""}</td>
+          <td class="px-4 py-3">${r.meta.forWho || ""}</td>
+          <td class="px-4 py-3">${r.meta.year || ""}</td>
+          <td class="px-4 py-3">${r.meta.category || ""}</td>
+          <td class="px-4 py-3">${r.meta.maxPoints || ""}</td>
+          <td class="px-4 py-3 font-semibold text-indigo-700">${r.points}</td>
+        </tr>
+      `;
+    });
+    const overallTotal = currentActivityRows.reduce((a,b)=>a+(Number(b.points)||0),0);
+    resultFooter.innerHTML = `
+      <tr class="bg-indigo-600 text-white">
+        <td class="px-4 py-3" colspan="8">Total Reward Points (All Activities)</td>
+        <td class="px-4 py-3 text-white">${overallTotal}</td>
+      </tr>
+    `;
+    resultTable.innerHTML = rowsHTML || `<tr><td class="px-4 py-3" colspan="9">No activity rows to show</td></tr>`;
+    if (totalRows > pageSize) paginationControls.classList.remove("hidden");
+    else if (totalRows === 0) paginationControls.classList.add("hidden");
+    else paginationControls.classList.remove("hidden");
+    pageInfo.textContent = `Showing ${startIndex+1}-${endIndex} of ${totalRows}`;
+    prevPageBtn.disabled = currentPage <= 1;
+    nextPageBtn.disabled = currentPage >= totalPages;
+  }
+
+  // parse activity name (unchanged)
+  function parseActivityName(name) {
+    const raw = String(name||'').trim();
+    const tokens = raw.split('_').map(t=>t.trim()).filter(t=>t.length>0);
+    const meta = { raw, forWho:'', year:'', dateStart:'', dateEnd:'', activityName:'', category:'', maxPoints:null, college:'' };
+    if (tokens.length < 6) { meta.activityName = raw; return meta; }
+    let idx = 0;
+    if (tokens[0].toUpperCase() === 'RP') idx = 1;
+    meta.forWho = tokens[idx] || ''; idx++;
+    meta.year = tokens[idx] || ''; idx++;
+    const dateToken = tokens[idx] || '';
+    if (dateToken.toLowerCase().indexOf('to') !== -1 || (tokens[idx+1] && tokens[idx+1].toLowerCase() === 'to')) {
+      if (dateToken.toLowerCase().indexOf('to') !== -1 && dateToken.indexOf('_To_')!==-1) {
+        const parts = dateToken.split('_To_');
+        meta.dateStart = parts[0] || '';
+        meta.dateEnd = parts[1] || meta.dateStart;
+        idx++;
+      } else if (tokens[idx+1] && tokens[idx+1].toLowerCase() === 'to') {
+        meta.dateStart = tokens[idx];
+        meta.dateEnd = tokens[idx+2] || tokens[idx];
+        idx += 3;
+      } else {
+        const parts = dateToken.split(/to/i);
+        meta.dateStart = (parts[0]||'').replace(/[_\-]/g,'.').trim();
+        meta.dateEnd = (parts[1]||meta.dateStart).replace(/[_\-]/g,'.').trim();
+        idx++;
+      }
+    } else {
+      meta.dateStart = dateToken;
+      meta.dateEnd = dateToken;
+      idx++;
+    }
+    let categoryIdx = -1;
+    for (let i = tokens.length - 1; i >= idx; i--) {
+      if (CATEGORY_CODES.includes(tokens[i].toUpperCase())) { categoryIdx = i; break; }
+    }
+    if (categoryIdx === -1) categoryIdx = tokens.length - 3;
+    meta.college = tokens[tokens.length - 1] || '';
+    const maxToken = tokens[tokens.length - 2] || '';
+    const maxN = Number(maxToken);
+    meta.maxPoints = isNaN(maxN) ? null : maxN;
+    meta.category = (tokens[categoryIdx] || '').toUpperCase();
+    if (!CATEGORY_CODES.includes(meta.category)) meta.category = 'OT';
+    if (categoryIdx > idx) meta.activityName = tokens.slice(idx, categoryIdx).join('_') || '';
+    else meta.activityName = tokens.slice(idx, tokens.length - 2).join('_') || '';
+    return meta;
+  }
+
+  // --- replaced loadInternalMarksForStudent (hardcoded-first, fallback heuristics) ---
+// Replace existing function with this full function
+async function loadInternalMarksForStudent(internalKey, department, registerNo, rewardPoints) {
+  // reset UI
+  internalMarksContainer.classList.add("hidden");
+  internalMarksThead.innerHTML = "";
+  internalMarksTbody.innerHTML = "";
+  internalMarksTfoot.innerHTML = "";
+  summaryTotalInternal.textContent = "0";
+  summaryAllocatedRP.textContent = "0";
+  summaryBalanceRP.textContent = "0";
+  summaryInternalOutOfMax.textContent = "0 / 0";
+  internalMarksNote.textContent = "Loading...";
+
+  if (!department) {
+    internalMarksNote.textContent = "Select Department to view marks";
+    return;
+  }
+  const mapping = (CONFIG.INTERNAL_MARKS_SHEETS && CONFIG.INTERNAL_MARKS_SHEETS[internalKey]) || {};
+  const deptSheet = mapping[department];
+  if (!deptSheet) {
+    internalMarksNote.innerHTML = `<span class="text-red-600">Internal marks sheet not configured for ${internalKey} → ${department}.</span>`;
+    return;
+  }
+
+  showStatus(`Loading internal marks for ${department} (${internalKey}) ...`, "info");
+
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/${deptSheet.id}/gviz/tq?sheet=${encodeURIComponent(deptSheet.name)}`;
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) { showStatus(`Error loading internal marks sheet (HTTP ${res.status}).`, "error"); return; }
+    const text = await res.text();
+    if (text.trim().startsWith("<!DOCTYPE html") || text.toLowerCase().includes("signin")) {
+      showStatus("Internal marks sheet returned HTML (not public). Make sheet 'Anyone with link - Viewer' or Publish to web.", "error");
+      return;
+    }
+    const json = JSON.parse(text.substr(47).slice(0, -2));
+    const cols = json.table.cols.map(c => c.label?.trim() || "").filter(Boolean);
+    const rowsRaw = (json.table.rows || []);
+    const rows = rowsRaw.map(r => {
+      const obj = {};
+      cols.forEach((c, i) => obj[c] = r.c[i]?.v ?? "");
+      return obj;
+    });
+
+    console.log("[DEBUG] Internal marks sheet:", department, `(${deptSheet.name})`);
+    console.log("[DEBUG] cols (headers):", cols);
+    console.log("[DEBUG] rowCount (raw):", rowsRaw.length);
+    console.log("[DEBUG] sample mapped row[1]:", rows[1]);
+
+    // find register header
+    const regKey = cols.find(c => normalizeLabel(c).includes("register") || normalizeLabel(c).includes("reg") || normalizeLabel(c).includes("roll"));
+    if (!regKey) {
+      internalMarksNote.innerHTML = `<span class="text-red-600">This internal sheet has no Register column to match student.</span>`;
+      return;
+    }
+
+    // locate student row
+    const studentRow = rows.find(r => String(r[regKey]).toLowerCase().trim() === (registerNo || "").toLowerCase().trim());
+    if (!studentRow) {
+      internalMarksNote.innerHTML = `<span class="text-yellow-700">No internal marks row found for Register No: ${registerNo}</span>`;
+      internalMarksContainer.classList.remove("hidden");
+      return;
+    }
+
+    // helper to find rp header for a subject code
+    const normalizedMap = new Map(cols.map(c => [normalizeLabel(c), c]));
+    function findRPColumnFor(base) {
+      const baseNorm = normalizeLabel(base);
+      const tries = [baseNorm + "_rp", baseNorm + " rp", baseNorm + "rp"];
+      for (const t of tries) if (normalizedMap.has(t)) return normalizedMap.get(t);
+      const candidate = cols.find(cn => normalizeLabel(cn).endsWith("_rp") && normalizeLabel(cn).includes(baseNorm));
+      if (candidate) return candidate;
+      // adjacent fallback
+      const idx = cols.findIndex(cc => normalizeLabel(cc) === baseNorm);
+      if (idx >= 0) {
+        if (cols[idx+1] && normalizeLabel(cols[idx+1]).includes("rp")) return cols[idx+1];
+        if (cols[idx-1] && normalizeLabel(cols[idx-1]).includes("rp")) return cols[idx-1];
+      }
+      return null;
+    }
+
+    // ----- HARD-CODED PATH: if deptSubjects[department] exists, use it (fast and exact) -----
+    const mappingSubjects = deptSubjects && deptSubjects[department];
+    const subjects = [];
+
+    if (mappingSubjects && Array.isArray(mappingSubjects) && mappingSubjects.length) {
+      console.log("[DEBUG] Using hardcoded mapping for department:", department);
+      for (const sub of mappingSubjects) {
+        // try to find exact header matching code
+        const codeHeader = cols.find(c => normalizeLabel(c) === normalizeLabel(sub.code) || c === sub.code);
+        // also allow code as prefix in header (e.g., "23AD302" vs "23AD302_RP")
+        const headerKey = codeHeader || cols.find(c => normalizeLabel(c).includes(normalizeLabel(sub.code)));
+        if (!headerKey) {
+          console.warn("[WARN] hardcoded subject code not found in sheet headers:", sub.code);
+          // skip missing subject (sheet might not contain that column)
+          continue;
+        }
+        const rpCol = findRPColumnFor(headerKey);
+        const marksVal = (studentRow[headerKey] === 0 || studentRow[headerKey] === "0") ? 0 : Number(studentRow[headerKey]) || 0;
+        const rpVal = rpCol ? (Number(studentRow[rpCol]) || 0) : 0;
+        const type = (sub.type === "Lab+Theory" || sub.type === "Lab + Theory") ? "Lab + Theory" : (sub.type === "Lab" ? "Lab" : "Theory");
+        const fixedMax = maxMap[type] !== undefined ? maxMap[type] : marksVal;
+        const finalMax = Math.max(fixedMax, marksVal);
+        subjects.push({ code: headerKey, type, marks: marksVal, rp: rpVal, max: finalMax, reasons: "hardcoded" });
+      }
+    }
+
+    // ----- FALLBACK: if no mapping or mapping produced 0 subjects, use heuristics (simplified) -----
+    if (!subjects.length) {
+      console.log("[DEBUG] No hardcoded mapping used; falling back to heuristic parsing.");
+      // find subject columns range (skip system headers at start)
+      const startIndex = cols.findIndex(c => {
+        const s = String(c||"");
+        return /[A-Za-z]/.test(s) && /\d/.test(s) && s.length >= 3;
+      });
+      const effectiveStart = Math.max(0, startIndex);
+      const stopIndex = cols.findIndex((c, idx) => {
+        const s = normalizeLabel(c||"");
+        return (s.includes("balance") && s.includes("reward")) || s.includes("allocated") || s.includes("total internal");
+      });
+      const effectiveStop = (stopIndex > effectiveStart) ? stopIndex : cols.length;
+
+      for (let i = effectiveStart; i < effectiveStop; i++) {
+        const col = cols[i];
+        if (!col) continue;
+        const n = normalizeLabel(col);
+        if (n.endsWith("_rp") || n.includes("reward") || isSystemHeader(col)) continue;
+        // pair rp
+        const rpCol = findRPColumnFor(col);
+        const marksVal = (studentRow[col] === 0 || studentRow[col] === "0") ? 0 : Number(studentRow[col]) || 0;
+        const rpVal = rpCol ? (Number(studentRow[rpCol]) || 0) : 0;
+
+        // simple heuristics for type: header text, or suffix codes
+        let type = "Theory";
+        if (n.includes("lab+theory") || n.includes("lab + theory") || /(11|12|31|32)$/.test(col)) type = "Lab + Theory";
+        else if (n.includes("lab")) type = "Lab";
+        else type = "Theory";
+
+        const fixedMax = maxMap[type] !== undefined ? maxMap[type] : marksVal;
+        const finalMax = Math.max(fixedMax, marksVal);
+        subjects.push({ code: col, type, marks: marksVal, rp: rpVal, max: finalMax, reasons: "heuristic" });
+      }
+    }
+
+    // ---------- Prepare totals & render ----------
+    const totalInternalMark = subjects.reduce((a,b)=>a + Number(b.marks || 0), 0);
+    const totalRP = subjects.reduce((a,b)=>a + Number(b.rp || 0), 0);
+
+    // try parse sheet-level Total Internal (Max: X) header
+    let sheetTotalInternalMax = null;
+    const totalInternalHeader = cols.find(c => normalizeLabel(c).includes("total internal"));
+    if (totalInternalHeader) {
+      const m = totalInternalHeader.match(/max[:\s]*\(?\s*(\d{1,4})\s*\)?/i);
+      if (m) sheetTotalInternalMax = Number(m[1]);
+    }
+    const finalTotalMax = sheetTotalInternalMax || subjects.reduce((a,b)=>a + Number(b.max || 0), 0);
+
+    // render header
+    internalMarksThead.innerHTML = `
+      <tr>
+        <th class="px-4 py-3">S.No</th>
+        <th class="px-4 py-3">Subject Code</th>
+        <th class="px-4 py-3">Subject Type</th>
+        <th class="px-4 py-3 text-center">Marks Allotted</th>
+        <th class="px-4 py-3 text-center">Reward Points Allotted</th>
+        <th class="px-4 py-3 text-center">Max Internal Mark</th>
+      </tr>
+    `;
+
+    // fill rows
+    let rowsHtml = "";
+    let sno = 1;
+    subjects.forEach(s => {
+      rowsHtml += `
+        <tr class="border-t">
+          <td class="px-4 py-3">${sno++}</td>
+          <td class="px-4 py-3 font-medium">${s.code}</td>
+          <td class="px-4 py-3">${s.type}</td>
+          <td class="px-4 py-3 text-center">${s.marks}</td>
+          <td class="px-4 py-3 text-center">${s.rp}</td>
+          <td class="px-4 py-3 text-center">${s.max}</td>
+        </tr>
+      `;
+    });
+    internalMarksTbody.innerHTML = rowsHtml || `<tr><td class="px-4 py-3" colspan="6">No subject data available</td></tr>`;
+
+    internalMarksTfoot.innerHTML = `
+      <tr class="bg-indigo-600 text-white font-semibold">
+        <td class="px-4 py-3" colspan="3">Total (All Subjects)</td>
+        <td class="px-4 py-3 text-center">${totalInternalMark}</td>
+        <td class="px-4 py-3 text-center">${totalRP}</td>
+        <td class="px-4 py-3 text-center">${finalTotalMax}</td>
+      </tr>
+    `;
+
+    // summary keys (loose)
+    let allocatedKey = cols.find(c => normalizeLabel(c).includes("allocated") && normalizeLabel(c).includes("rp"));
+    let balanceKey = cols.find(c => normalizeLabel(c).includes("balance") && normalizeLabel(c).includes("reward"));
+    if (!allocatedKey) allocatedKey = cols.find(c => normalizeLabel(c).includes("allocated"));
+    if (!balanceKey) balanceKey = cols.find(c => normalizeLabel(c).includes("balance"));
+
+    summaryTotalInternal.textContent = (typeof rewardPoints === "number") ? rewardPoints : totalInternalMark;
+    summaryAllocatedRP.textContent = allocatedKey ? (Number(studentRow[allocatedKey]) || 0) : 0;
+    summaryBalanceRP.textContent = balanceKey ? (Number(studentRow[balanceKey]) || 0) : 0;
+    summaryInternalOutOfMax.textContent = `${totalInternalMark} / ${finalTotalMax}`;
+
+    internalMarksNote.textContent = `Internal marks loaded from ${deptSheet.name}`;
+    internalMarksContainer.classList.remove("hidden");
+    showStatus("Internal marks loaded.", "success");
+    console.log("[DEBUG] subjects.length:", subjects.length, "totalInternalMark:", totalInternalMark, "totalRP:", totalRP, "finalTotalMax:", finalTotalMax);
+    console.log("[DEBUG] subject details (first 20):", subjects.slice(0,20));
+
+  } catch (err) {
+    console.error("Failed to load internal marks:", err);
+    showStatus("Error loading internal marks. See console.", "error");
+  }
+}
+
   function searchStudent() {
     resultSection.classList.add("hidden");
-    resultTable.innerHTML = "";
-    studentInfo.innerHTML = "";
+    resultTable.innerHTML = ""; resultFooter.innerHTML = ""; studentInfo.innerHTML = "";
+
+    // reset internal marks UI
+    internalMarksContainer.classList.add("hidden");
+    internalMarksThead.innerHTML = ""; internalMarksTbody.innerHTML = ""; internalMarksTfoot.innerHTML = "";
+    summaryTotalInternal.textContent = "0"; summaryAllocatedRP.textContent = "0";
+    summaryBalanceRP.textContent = "0"; summaryInternalOutOfMax.textContent = "0 / 0";
+
+    currentActivityRows = []; currentPage = 1;
 
     const roll = regEl.value.trim().toLowerCase();
     const email = emailEl.value.trim().toLowerCase();
@@ -349,7 +768,6 @@
     const deptHeader = headerMap[Object.keys(headerMap).find(k => k.includes("department"))];
 
     let filtered = students;
-
     if (registerHeader && roll) filtered = filtered.filter(s => String(s[registerHeader]).toLowerCase() === roll);
     if (emailHeader && email) filtered = filtered.filter(s => String(s[emailHeader]).toLowerCase() === email);
     if (nameHeader && name) filtered = filtered.filter(s => String(s[nameHeader]).toLowerCase().includes(name));
@@ -380,17 +798,13 @@
 
     if (!filtered.length) {
       alert("❌ No records found.");
-      avgPointsEl.textContent = "0";
-      studentPointsEl.textContent = "0";
-      remainingPointsEl.textContent = "0";
+      avgPointsEl.textContent = "0"; studentPointsEl.textContent = "0"; remainingPointsEl.textContent = "0";
       return;
     }
 
     const student = filtered[0];
-
-    const rpHeaders = headers.filter(h => h.startsWith("RP_"));
-    const studentTotal = rpHeaders.reduce((acc,h) => acc + (Number(student[h]) || 0), 0);
-
+    const activityHeaders = headers.filter(h => !isSystemHeader(h));
+    const studentTotal = activityHeaders.reduce((acc,h) => acc + (Number(student[h]) || 0), 0);
     const avgResult = computeAverageAndTotals();
     const avgPoints = Number(avgResult.avg).toFixed(2);
     const remaining = Math.max(0, Number(avgPoints) - studentTotal);
@@ -407,55 +821,62 @@
       <div><strong>Year:</strong> 2nd Year</div>
     `;
 
-    resultTable.innerHTML = "";
-    let sno = 1;
-    rpHeaders.forEach(h => {
+    // Build activityRows array
+    const activityRows = [];
+    activityHeaders.forEach(h => {
       if (activityFilter && activityFilter !== h) return;
       const points = Number(student[h]) || 0;
-      if (points > 0) {
-        const { date, activity } = parseActivityDetails(h);
-        resultTable.innerHTML += `
-          <tr class="hover:bg-indigo-50 transition-colors">
-            <td class="px-6 py-4">${sno++}</td>
-            <td class="px-6 py-4 font-medium">${activity}</td>
-            <td class="px-6 py-4 text-gray-500">${date}</td>
-            <td class="px-6 py-4 font-semibold text-indigo-700">${points}</td>
-          </tr>
-        `;
+      if (points >= 0) {
+        const meta = parseActivityName(h);
+        const displayName = meta.activityName && meta.activityName !== meta.raw ? meta.activityName.replace(/_/g," ") : h.replace(/^RP_/,"").replace(/_/g," ");
+        if (points > 0) activityRows.push({ headerName: h, displayName, meta, points });
       }
     });
 
-    if (!activityFilter) {
-      resultTable.innerHTML += `
-        <tr class="bg-indigo-50 font-bold">
-          <td class="px-6 py-4" colspan="3">Total</td>
-          <td class="px-6 py-4 text-green-700">${studentTotal}</td>
-        </tr>
-      `;
-    }
-
+    currentActivityRows = activityRows;
+    currentPage = 1;
+    renderActivityTable(currentActivityRows);
     resultSection.classList.remove("hidden");
+
+    // fetch internal marks ONLY if dept and register provided
+    if (roll && deptVal) {
+      loadInternalMarksForStudent(activeInternal, deptVal, roll, studentTotal).catch(err=>{
+        console.error("Internal marks load failed:", err);
+        showStatus("Error loading internal marks. See console.", "error");
+      });
+    } else {
+      internalMarksContainer.classList.add("hidden");
+      internalMarksNote.textContent = "To view internal marks, select Department and enter Register No.";
+    }
   }
 
-  // when internal changed -> load that sheet
-  internalSelect.addEventListener("change", async function() {
-    activeInternal = internalSelect.value || "IP2";
+  internalSelect.addEventListener("change", async function(){
+    activeInternal = internalSelect.value || "IP1";
     setFiltersEnabled(false);
     const ok = await loadSheet(activeInternal);
     setFiltersEnabled(ok);
   });
 
-  // search button handler
-  document.getElementById("searchBtn").addEventListener("click", searchStudent);
+  function setFiltersEnabled(enabled) {
+    deptEl.disabled = !enabled; activityEl.disabled = !enabled; regEl.disabled = !enabled;
+    emailEl.disabled = !enabled; nameEl.disabled = !enabled; searchBtn.disabled = !enabled;
+    if (enabled){ deptEl.classList.remove("opacity-50"); activityEl.classList.remove("opacity-50"); }
+    else { deptEl.classList.add("opacity-50"); activityEl.classList.add("opacity-50"); }
+  } 
 
-  // init: default IP2 selected and loaded; enable filters only if load succeeds
-  (async function init() {
-    internalSelect.value = "IP2";
-    const ok = await loadSheet("IP2");
+  searchBtn.addEventListener("click", searchStudent);
+  pageSizeSelect.addEventListener("change", function(){ pageSize = Number(pageSizeSelect.value) || 10; currentPage = 1; renderActivityTable(currentActivityRows); });
+  prevPageBtn.addEventListener("click", function(){ if (currentPage > 1) { currentPage--; renderActivityTable(currentActivityRows); }});
+  nextPageBtn.addEventListener("click", function(){ const totalPages = Math.max(1, Math.ceil(currentActivityRows.length / pageSize)); if (currentPage < totalPages) { currentPage++; renderActivityTable(currentActivityRows); }});
+
+  (async function init(){
+    internalSelect.value = CONFIG.defaultInternal || "IP1";
+    activeInternal = internalSelect.value || "IP1";
+    pageSize = Number(pageSizeSelect.value) || 10;
+    const ok = await loadSheet(activeInternal);
     setFiltersEnabled(ok);
   })();
 
 </script>
-
 </body>
 </html>
